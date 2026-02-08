@@ -4,15 +4,21 @@ from engine import get_next_state, battle
 
 def run_game():
     current_state = "start"
-    player = {"hp" : 20}
+    player = {
+        "hp": 20,
+        "max_hp": 20,
+        "xp": 0,
+        "level": 1,
+        "min_dmg": 3,
+        "max_dmg": 7
+    }
     
     while True:
         print(f"\nYou are at: {current_state}")
         
         if current_state in ["treasure", "game_over", "monster"]:
             if current_state == "treasure":
-                print("\nYou found a treasure!")
-                print(f"\nPlayer HP: {player['hp']}")
+                print("\nYou found a treasure!\n")
                 break
             
             elif current_state == "game_over":
