@@ -1,5 +1,5 @@
 from game_map import game_map
-from engine import get_next_state
+from engine import get_next_state, battle
 
 def run_game():
     current_state = "start"
@@ -17,10 +17,10 @@ def run_game():
                 break
             
             else:
-                print("\nYou were attacked by a monster!")
-                break
+                current_state = battle()
+                continue
             
-        actions = game_map[current_state].keys()
+        actions = game_map[current_state].keys() # type: ignore
         
         print("Available actions:", " , ".join(actions))
         user_input = input("> ")
