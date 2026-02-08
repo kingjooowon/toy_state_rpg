@@ -1,5 +1,23 @@
 import random
 
+monsters = {
+    "slime": {
+        "hp": 10,
+        "min_dmg": 1,
+        "max_dmg": 4
+    },
+    "goblin": {
+        "hp": 15,
+        "min_dmg": 2,
+        "max_dmg": 6
+    },
+    "dragon": {
+        "hp": 25,
+        "min_dmg": 4,
+        "max_dmg": 10
+    }
+}
+
 def get_next_state(game_map, current_state, action):
     if current_state not in game_map:
         return None
@@ -16,12 +34,19 @@ def get_next_state(game_map, current_state, action):
         return None
     
 def battle(player):
-    monster_hp = 15
+    monster_name = random.choice(list(monsters.keys()))
+    monster = monsters[monster_name]
+    monster_hp = monster["hp"]
+    
+    print(f"\nA wild {monster_name} appeared!")
     
     while player["hp"] > 0 and monster_hp > 0:
         
         player_damage, p_cri = calculate_damage(3,7)
-        monster_damage, m_cri = calculate_damage(2,6)
+        monster_damage, m_cri = calculate_damage(
+            monster["min_dmg"],
+            monster["max_dmg"]
+        )
         
         print("\nCurrent HP")
         print(f"Player: {player['hp']}, Monster: {monster_hp}")
