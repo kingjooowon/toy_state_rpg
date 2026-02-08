@@ -21,18 +21,39 @@ def battle():
     
     while player_hp > 0 and monster_hp > 0:
         
-        player_damage = random.randint(3,7)
-        monster_damage = random.randint(2,6)
+        player_damage, p_cri = calculate_damage(3,7)
+        monster_damage, m_cri = calculate_damage(2,6)
         
         print("\nCurrent HP")
         print(f"Player: {player_hp}, Monster: {monster_hp}")
         
-        print(f"\nYou attacked a monster({player_damage} damage)")
+        print("\nYou attacked a monster")
+        if p_cri:
+            print(f"Critical Hit! {player_damage} damage!")
+        else:
+            print(f"{player_damage} damage")
         monster_hp -= player_damage
         if monster_hp <= 0:
             return "treasure"
-        
-        print(f"\nYou were attacked by a monster({monster_damage} damage)")
+            
+        print("\nYou were attacked by a monster")
+        if m_cri:
+            print(f"Critical Hit! {monster_damage} damage!")
+        else:
+            print(f"{monster_damage} damage")
         player_hp -= monster_damage
         if player_hp <= 0:
             return "game_over"
+        
+def calculate_damage(min_dmg, max_dmg):
+    is_critical = False
+    critical_rate = 0.9
+    damage = random.randint(min_dmg, max_dmg)
+    
+    if random.random() <= critical_rate:
+        is_critical = True
+        damage *= 2
+        return damage, is_critical
+    
+    else:
+        return damage, is_critical
