@@ -58,10 +58,18 @@ def battle(player):
     weights = []
     
     for name, data in monsters.items():
-        scaled_weight = data["weight"] + player["level"] * 2
+        base = data['weight']
+        
+        if name == 'slime':
+            scaled = max(5, base - player['level'] * 5)
+        elif name == 'dragon':
+            scaled = base + player['level'] * 5
+        else:
+            scaled = base + player['level'] * 2
+            
         names.append(name)
-        weights.append(scaled_weight)
-    
+        weights.append(scaled)
+        
     monster_name = random.choices(names, weights=weights, k=1)[0]
     monster = monsters[monster_name]
 
@@ -73,6 +81,9 @@ def battle(player):
             player['min_dmg'],
             player['max_dmg']
         )
+        
+        p_cri += 0.15
+        
         monster_damage, m_cri = calculate_damage(
             monster["min_dmg"],
             monster["max_dmg"]
@@ -91,8 +102,7 @@ def battle(player):
             print(f"\nYou defeated the {monster_name}!")
             player['xp'] += monster['xp']
             print(f"Gained {monster['xp']} XP!")
-            check_level_up(player)
-            return "treasure"
+            return "win"
             
         print(f"\nYou were attacked by a {monster_name}")
         if m_cri:
@@ -117,7 +127,7 @@ def calculate_damage(min_dmg, max_dmg):
         return damage, is_critical
     
 def check_level_up(player):
-    required_xp = player['level'] * 10
+    required_xp = player['level'] * 20
     
     if player['xp'] >= required_xp:
         player['level'] += 1

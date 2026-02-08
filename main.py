@@ -1,5 +1,5 @@
 from game_map import game_map
-from engine import get_next_state, battle
+from engine import get_next_state, battle, check_level_up
 
 
 def run_game():
@@ -16,17 +16,43 @@ def run_game():
     while True:
         print(f"\nYou are at: {current_state}")
         
-        if current_state in ["treasure", "game_over", "monster"]:
+        if current_state in ["treasure", "game_over", "monster", "win"]:
             if current_state == "treasure":
-                print("\nYou found a treasure!\n")
-                break
+                print("\nYou found a treasure!")
+                print("\nGained 10 XP!")
+                print("10% of your health has been restored")
+                player['xp'] += 10
+                player['hp'] += int(player['hp'] * 0.1)
+                if player['hp'] > player['max_hp']:
+                    player['hp'] = player['max_hp']
+                    
+                print(f"\nPlayer HP: {player['hp']}")
+                    
+                check_level_up(player)
+                
+                current_state = "forest"
+                continue
             
             elif current_state == "game_over":
                 print("\nGame Over")
                 break
             
-            else:
-                current_state = battle(player)
+            elif current_state == "monster":
+                    current_state = battle(player)
+                    continue
+                
+            elif current_state == "win":
+                print("\nYou won the battle!")
+                print("30% of your health has been restored")
+                player['hp'] += int(player['hp'] * 0.3)
+                if player['hp'] > player['max_hp']:
+                    player['hp'] = player['max_hp']
+                    
+                print(f"\nPlayer HP: {player['hp']}")
+                
+                check_level_up(player)
+                
+                current_state = "forest"
                 continue
             
         actions = game_map[current_state].keys() # type: ignore
