@@ -7,26 +7,30 @@ def run_game():
     while True:
         print(f"\nYou are at: {current_state}")
         
-        if current_state in ["treasure", "game_over"]:
+        if current_state in ["treasure", "game_over", "monster"]:
             if current_state == "treasure":
                 print("\nYou found a treasure!")
                 break
             
-            else:
+            elif current_state == "game_over":
                 print("\nGame Over")
+                break
+            
+            else:
+                print("\nYou were attacked by a monster!")
                 break
             
         actions = game_map[current_state].keys()
         
-        print("\nAvailable actions:", " , ".join(actions))
+        print("Available actions:", " , ".join(actions))
         user_input = input("> ")
         
         next_state = get_next_state(game_map, current_state, user_input)
-        if next_state:
+        if next_state is not None:
             current_state = next_state
             continue
         else:
-            return "\nError"
+            print("\nError")
         
 if __name__ == "__main__":
     run_game()

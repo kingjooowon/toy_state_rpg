@@ -8,9 +8,10 @@ game_map = {
         "run": "start"
     },
     "cave": {
-        "open_chest": "treasure",
+        "open_chest": ["treasure", "monster"],
         "leave": "forest"
     },
     "treasure": {},
-    "game_over": {}
+    "game_over": {},
+    "monster" : {}
 }
