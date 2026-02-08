@@ -9,23 +9,22 @@ def get_next_state(game_map, current_state, action):
         
         if isinstance(result, list):
             return random.choice(result)
+        
         else:
             return result
-        
     else:
         return None
     
-def battle():
-    player_hp = 20
+def battle(player):
     monster_hp = 15
     
-    while player_hp > 0 and monster_hp > 0:
+    while player["hp"] > 0 and monster_hp > 0:
         
         player_damage, p_cri = calculate_damage(3,7)
         monster_damage, m_cri = calculate_damage(2,6)
         
         print("\nCurrent HP")
-        print(f"Player: {player_hp}, Monster: {monster_hp}")
+        print(f"Player: {player['hp']}, Monster: {monster_hp}")
         
         print("\nYou attacked a monster")
         if p_cri:
@@ -41,8 +40,8 @@ def battle():
             print(f"Critical Hit! {monster_damage} damage!")
         else:
             print(f"{monster_damage} damage")
-        player_hp -= monster_damage
-        if player_hp <= 0:
+        player['hp'] -= monster_damage
+        if player['hp'] <= 0:
             return "game_over"
         
 def calculate_damage(min_dmg, max_dmg):

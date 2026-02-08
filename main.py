@@ -1,8 +1,10 @@
 from game_map import game_map
 from engine import get_next_state, battle
 
+
 def run_game():
     current_state = "start"
+    player = {"hp" : 20}
     
     while True:
         print(f"\nYou are at: {current_state}")
@@ -10,6 +12,7 @@ def run_game():
         if current_state in ["treasure", "game_over", "monster"]:
             if current_state == "treasure":
                 print("\nYou found a treasure!")
+                print(f"\nPlayer HP: {player['hp']}")
                 break
             
             elif current_state == "game_over":
@@ -17,7 +20,7 @@ def run_game():
                 break
             
             else:
-                current_state = battle()
+                current_state = battle(player)
                 continue
             
         actions = game_map[current_state].keys() # type: ignore
