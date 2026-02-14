@@ -1,7 +1,6 @@
 from game_map import game_map
 from engine import get_next_state, battle, check_level_up
 
-
 def run_game():
     current_state = "start"
     player = {
@@ -13,6 +12,9 @@ def run_game():
         "max_dmg": 7
     }
     
+    round = 1
+    stage = 1
+    
     while True:
         print(f"\nYou are at: {current_state}")
         
@@ -21,6 +23,7 @@ def run_game():
                 print("\nYou found a treasure!")
                 print("\nGained 10 XP!")
                 print("10% of your health has been restored")
+                
                 player['xp'] += 10
                 player['hp'] += int(player['hp'] * 0.1)
                 if player['hp'] > player['max_hp']:
@@ -44,6 +47,7 @@ def run_game():
             elif current_state == "win":
                 print("\nYou won the battle!")
                 print("30% of your health has been restored")
+                
                 player['hp'] += int(player['hp'] * 0.3)
                 if player['hp'] > player['max_hp']:
                     player['hp'] = player['max_hp']
@@ -61,6 +65,7 @@ def run_game():
         user_input = input("> ")
         
         next_state = get_next_state(game_map, current_state, user_input)
+        
         if next_state is not None:
             current_state = next_state
             continue

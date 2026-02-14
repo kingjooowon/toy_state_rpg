@@ -71,18 +71,39 @@ def battle(player):
         weights.append(scaled)
         
     monster_name = random.choices(names, weights=weights, k=1)[0]
-    monster = monsters[monster_name]
+    monster_data = monsters[monster_name]
+    monster = monster_data.copy()
 
     print(f"\nA wild {monster_name} appeared!")
     
     while player["hp"] > 0 and monster['hp'] > 0:
         
-        player_damage, p_cri = calculate_damage(
-            player['min_dmg'],
-            player['max_dmg']
-        )
+        healed = False
         
-        p_cri += 0.15
+        print("\nChoose action: 1. attack / 2. heal / 3. power")
+        action = input("> ")
+        
+        if action == "attack":
+            player_damage, p_cri = calculate_damage(
+                player['min_dmg'],
+                player['max_dmg']
+            )
+            
+        elif action == "heal":
+            healed = True
+            heal_amount = int(player['max_hp'] * 0.2)
+            player['hp'] += heal_amount
+            if player['hp'] > player['max_hp']:
+                player['hp'] = player['max_hp']
+                
+        else:
+            if random.random() <= 0.7:
+                player_damage, p_cri = calculate_damage(player['min_dmg'], player['max_dmg'])
+                multiplier = random.uniform(1.5, 2.0)
+                player_damage = int(player_damage * multiplier)
+            else:
+                print("You missed!")
+                player_damage = 0
         
         monster_damage, m_cri = calculate_damage(
             monster["min_dmg"],
@@ -92,17 +113,18 @@ def battle(player):
         print("\nCurrent HP")
         print(f"Player: {player['hp']}, {monster_name}: {monster['hp']}")
         
-        print(f"\nYou attacked a {monster_name}")
-        if p_cri:
-            print(f"Critical Hit! {player_damage} damage!")
-        else:
-            print(f"{player_damage} damage")
-        monster['hp'] -= player_damage
-        if monster['hp'] <= 0:
-            print(f"\nYou defeated the {monster_name}!")
-            player['xp'] += monster['xp']
-            print(f"Gained {monster['xp']} XP!")
-            return "win"
+        if healed == False:
+            print(f"\nYou attacked a {monster_name}")
+            if p_cri:
+                print(f"Critical Hit! {player_damage} damage!")
+            else:
+                print(f"{player_damage} damage")
+            monster['hp'] -= player_damage
+            if monster['hp'] <= 0:
+                print(f"\nYou defeated the {monster_name}!")
+                player['xp'] += monster['xp']
+                print(f"Gained {monster['xp']} XP!")
+                return "win"
             
         print(f"\nYou were attacked by a {monster_name}")
         if m_cri:
